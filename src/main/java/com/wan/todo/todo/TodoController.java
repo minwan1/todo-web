@@ -29,7 +29,7 @@ public class TodoController {
 
     @GetMapping
     public Page<TodoResponse> getTodos(final PageVo vo) {
-        final Pageable pageable = vo.makePageable(1, "id");
+        final Pageable pageable = vo.makePageable(0, "id");
         final Page<Todo> todos = todoService.getTodos(pageable);
         final List<TodoResponse> todoResponses = TodoResponse.valueOf(todos.getContent());
         return new PageImpl<>(todoResponses, pageable, todos.getTotalElements());
