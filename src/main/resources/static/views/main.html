@@ -1,0 +1,154 @@
+<div class="generic-container">
+  <div class="panel panel-default">
+    <!-- Default panel contents -->
+    <div class="panel-heading"><span class="lead">TODO List</span></div>
+    <div class="panel-body">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>할일</th>
+            <th>작성일시</th>
+            <th>최종수정일시</th>
+            <th>완료 여부</th>
+            <th width="100"></th>
+            <th width="100"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="todo in todos.content">
+            <td>{{todo.id}}</td>
+            <td>{{todo.content}}</td>
+            <td>{{todo.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            <td>{{todo.updatedAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            <td ng-if="todo.complete">완료</td>
+            <td ng-if="!todo.complete"></td>
+            <td ng-if="!todo.complete">
+              <button type="button" ng-click="completeTodo(todo, currentPage)" class="btn btn-primary custom-width">완료</button>
+            </td>
+            <td ng-if="!todo.complete">
+              <button type="button" ng-click="setTodoUpdate(todo)" class="btn btn-primary custom-width">수정하기</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="row">
+          <div class="col-xs-4"></div>
+          <div class="col-xs-4">
+            <ul ng-change="pageChanged(currentPage)" uib-pagination total-items="totalTodoCount" ng-model="currentPage"
+                max-size="maxSize" class="pagination-sm generic-container" boundary-links="true"
+                num-pages="numPages"></ul>
+          </div>
+          <div class="col-xs-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-default" ng-if="!todo.isUpdateMode">
+  <!-- Default panel contents -->
+  <div class="panel-heading"><span class="lead">TODO 추가</span></div>
+  <div class="panel-body">
+    <div class="formcontainer">
+      <form ng-submit="createTodo(todoForm, todo)" name="todoForm" class="form-horizontal">
+
+        <div class="row">
+          <div class="form-group col-md-12">
+            <label class="col-md-2 control-lable" for="content">할일</label>
+            <div class="col-md-7">
+              <input type="text" ng-model="todo.content" id="content" class="form-control input-sm"
+                     placeholder="할일을 추가하세요." required ng-pattern="ctrl.onlyIntegers"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-12">
+            <label class="col-md-2 control-lable" for="refId">참조 ID</label>
+            <div class="col-md-6">
+              <input type="number" id="refId" ng-model="refId" class="form-control input-sm" placeholder="참조할 ID를 입력해주세요.(ID를 하나씩 추가해주세요.)"/>
+            </div>
+            <div class="col-md-2">
+              <button type="button" ng-click="addReferenceId(todo, refId)" class="form-control btn btn-warning btn-sm">참조 ID 추가</button>
+            </div>
+            <div class="col-md-2">
+              <button type="button" ng-click="resetRefIds(todo)" class="form-control btn btn-warning btn-sm">참조 ID 리셋</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <ul ng-repeat="id in todo.refIds">
+              <li>{{ id }}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="row" class="col-md-12">
+          <div class="form-actions floatRight">
+            <input type="submit" value="추가하기" class="btn btn-primary btn-sm col-md-12">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="panel panel-default" ng-if="todo.isUpdateMode">
+  <!-- Default panel contents -->
+  <div class="panel-heading"><span class="lead">TODO 수정</span></div>
+  <div class="panel-body">
+    <div class="formcontainer">
+      <form ng-submit="updateTodo(todoForm, todo, currentPage)" name="todoForm" class="form-horizontal">
+
+        <div class="row">
+          <div class="form-group col-md-12">
+            <label class="col-md-2 control-lable" for="content">할일</label>
+            <div class="col-md-7">
+              <input type="text" ng-model="todo.content" id="content" class="form-control input-sm"
+                     placeholder="할일을 추가하세요." required ng-pattern="ctrl.onlyIntegers"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-12">
+            <label class="col-md-2 control-lable" for="refId">참조 ID</label>
+            <div class="col-md-6">
+              <input type="number" id="refId" ng-model="refId" class="form-control input-sm" placeholder="참조할 ID를 입력해주세요.(ID를 하나씩 추가해주세요.)"/>
+            </div>
+            <div class="col-md-2">
+              <button type="button" ng-click="addReferenceId(todo, refId)" class="form-control btn btn-warning btn-sm">참조 ID 추가</button>
+            </div>
+            <div class="col-md-2">
+              <button type="button" ng-click="resetRefIds(todo)" class="form-control btn btn-warning btn-sm">참조 ID 리셋</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <ul ng-repeat="id in todo.refIds">
+              <li>{{ id }}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="row" class="col-md-12">
+          <div class="form-actions floatRight">
+            <input type="submit" value="수정하기" class="btn btn-primary btn-sm col-md-12">
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

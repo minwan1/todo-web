@@ -1,0 +1,39 @@
+<div class="ui  grid">
+  <div class="three column" style="margin-top: 30%; text-align: center;">
+    <div class="column centered">
+      <h2 class="ui teal image header">
+        <i class="power icon"></i>
+        <div class="content">
+          로그인을 해주세요.
+        </div>
+      </h2>
+    </div>
+
+    <div class="column" style="margin-top: 10px;">
+      <button class="ui facebook button"
+              style="width: 70%;border-radius: 23px" ng-click="socialLogin()">
+        <i class="facebook icon" style=" "></i>
+        Facebook
+      </button>
+    </div>
+    <div class="column" style="margin-top: 10px;">
+      <button class="ui facebook button"
+              style="width: 70%;border-radius: 23px;background: #fdd000">
+        <i class="talk outline icon" style=" "></i>
+        KAKAO TALK
+      </button>
+    </div>
+
+    <!--<div class="column" style="margin-top: 10px;">-->
+      <!--<button class="ui button"-->
+              <!--style="width: 70%; height: 70px; text-align: center; border-radius: 23px; background: yellow">-->
+        <!--<i class="talk outline icon" style="color: black;font-size: 2rem;"></i>-->
+        <!--<span style="font-size: 2ch">KAKAO TALK</span>-->
+      <!--</button>-->
+    <!--</div>-->
+  </div>
+</div>
+
+<form method="POST" id="facebook_connect">
+  <input type="hidden" name="scope" value="public_profile,user_friends,email" />
+</form>
