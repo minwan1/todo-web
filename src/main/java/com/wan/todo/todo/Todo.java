@@ -1,9 +1,7 @@
 package com.wan.todo.todo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wan.todo.todo.exception.CompleteRequirementFailException;
 import com.wan.todo.todo.exception.TodoReferenceImpossibilityException;
-import com.wan.todo.todoreference.TodoReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,7 +41,7 @@ public class Todo {
 //    private Set<TodoReference> referenceChildTodos = new HashSet<>(); // 내가 참조 되어지는것(참조 자식)
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "todo_parent_ref",
             joinColumns = {@JoinColumn(name = "todo_id", nullable = false)},
@@ -51,7 +49,7 @@ public class Todo {
     )
     private Set<Todo> referenceParentTodos = new HashSet<>();
 
-    @ManyToMany(mappedBy = "referenceParentTodos" , fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "referenceParentTodos" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Todo> referenceChildTodos = new HashSet<>();
 
 
@@ -70,12 +68,12 @@ public class Todo {
     }
 
     //for test
-    public Todo(long id, String content, boolean complete, Set<TodoReference> referenceParentTodos, Set<TodoReference> referenceChildTodos) {
+    public Todo(long id, String content, boolean complete, Set<Todo> referenceParentTodos, Set<Todo> referenceChildTodos) {
         this.id = id;
         this.content = content;
         this.complete = complete;
-//        this.referenceParentTodos = referenceParentTodos;
-//        this.referenceChildTodos = referenceChildTodos;
+        this.referenceParentTodos = referenceParentTodos;
+        this.referenceChildTodos = referenceChildTodos;
     }
 
     public void updateContent(String content, List<Todo> referenceTodoParents) {
@@ -99,12 +97,12 @@ public class Todo {
         }
     }
 
-    public void addRefParent(TodoReference todoReference) {
-//        this.referenceParentTodos.add(todoReference);
+    public void addRefParent(Todo todo) {
+        this.referenceParentTodos.add(todo);
     }
 
-    public void addRefChild(TodoReference todoReference) {
-//        this.referenceChildTodos.add(todoReference);
+    public void addRefChild(Todo todo) {
+        this.referenceChildTodos.add(todo);
     }
 
     public void verifyTodoIsReferable() {

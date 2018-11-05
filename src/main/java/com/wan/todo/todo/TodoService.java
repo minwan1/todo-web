@@ -64,7 +64,4 @@ public class TodoService {
         return todo;
     }
 
-    public void test(long id) {
-//        todo
-    }
 }

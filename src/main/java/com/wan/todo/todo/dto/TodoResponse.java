@@ -1,7 +1,6 @@
 package com.wan.todo.todo.dto;
 
 import com.wan.todo.todo.Todo;
-import com.wan.todo.todoreference.TodoReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,12 +33,6 @@ public class TodoResponse {
     public static List<TodoResponse> valueOf(List<Todo> content) {
         return content.stream()
                 .map(TodoResponse::new)
-                .collect(Collectors.toList());
-    }
-
-    public static List<TodoResponse> valueOfReferenceTodo(Set<TodoReference> referenceTodos) {
-        return referenceTodos.stream()
-                .map(referenceTodo -> new TodoResponse(referenceTodo.getRefTodo()))
                 .collect(Collectors.toList());
     }
 }

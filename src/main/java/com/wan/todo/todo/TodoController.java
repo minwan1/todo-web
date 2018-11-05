@@ -56,9 +56,4 @@ public class TodoController {
         todoService.verifyTodoIsReferable(id);
     }
 
-    @GetMapping(value = "/test")
-    public void test(@PathVariable final long id) {
-        todoService.test(id);
-    }
-
 }

@@ -2,7 +2,6 @@ package com.wan.todo.todo;
 
 import com.wan.todo.todo.exception.CompleteRequirementFailException;
 import com.wan.todo.todo.exception.TodoReferenceImpossibilityException;
-import com.wan.todo.todoreference.TodoReference;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,11 +25,9 @@ public class TodoTest {
         todo = new Todo(2L, TODO_CONTENT,false, new HashSet<>(), new HashSet<>());
         childTodo = new Todo(3L, "child", false, new HashSet<>(), new HashSet<>());
 
-        final TodoReference parentReference = new TodoReference(todo, parentTodo);
-        final TodoReference childReference = new TodoReference(childTodo, todo);
+        todo.addRefParent(parentTodo);
+        todo.addRefChild(childTodo);
 
-        todo.addRefParent(parentReference);
-        todo.addRefChild(childReference);
     }
 
     @Test
@@ -55,8 +52,7 @@ public class TodoTest {
         //given
         todo = new Todo(2L, TODO_CONTENT,false, new HashSet<>(), new HashSet<>());
         childTodo = new Todo(3L, "child", true, new HashSet<>(), new HashSet<>());
-        final TodoReference childReference = new TodoReference(childTodo, todo);
-        todo.addRefChild(childReference);
+        todo.addRefChild(childTodo);
         //when
         //then
         todo.complete();

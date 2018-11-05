@@ -4,8 +4,6 @@ import com.wan.todo.common.PageVo;
 import com.wan.todo.todo.dto.TodoCreateRequest;
 import com.wan.todo.todo.dto.TodoUpdateRequest;
 import com.wan.todo.todo.exception.TodoNotFoundException;
-import com.wan.todo.todo.exception.TodoReferenceImpossibilityException;
-import com.wan.todo.todoreference.TodoReference;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -53,7 +51,6 @@ public class TodoServiceTest {
         //then
         assertThat(todo.getContent(), is(request.getContent()));
         assertThat(todo.getReferenceParentTodos().size(), is(referenceParentTodos.size()));
-        assertThat(isReferenceCorrect(referenceParentTodos, mockTodo, todo), is(true));
     }
 
     @Test
@@ -63,7 +60,7 @@ public class TodoServiceTest {
         final PageVo pageVo = new PageVo();
         final Pageable peageable = pageVo.makePageable(1, "id");
         final List<Todo> mockTodos = getTodos();
-        given(todoRepository.findAll(peageable)).willReturn(new PageImpl<>(mockTodos, peageable, mockTodos.size()));
+        given(todoRepository.findAllFechJoinParents(peageable)).willReturn(new PageImpl<>(mockTodos, peageable, mockTodos.size()));
 
         //when
         final Page<Todo> todos = todoService.getTodos(peageable);
@@ -96,7 +93,7 @@ public class TodoServiceTest {
     @Test
     public void complete_TodoIsCompleted_Todo() {
         //given
-        given(todoRepository.findOne(anyLong())).willReturn(new Todo("test",  new ArrayList<>()));
+        given(todoRepository.findbyOneFetchJoin(anyLong())).willReturn(new Todo("test",  new ArrayList<>()));
 
         //when
         final Todo todo = todoService.completeTodo(0l);
@@ -128,7 +125,7 @@ public class TodoServiceTest {
     @Test
     public void getParentTodoReferences_GettingParentTodoIsSuccess_Todoreferences() {
         //given
-        given(todoRepository.findOne(anyLong())).willReturn(new Todo("test",  new ArrayList<>()));
+        given(todoRepository.findbyOneFetchJoin(anyLong())).willReturn(new Todo("test",  new ArrayList<>()));
 
         //when
         final Set<Todo> parentTodoReferences = todoService.getParentTodoReferences(0l);
@@ -146,10 +143,6 @@ public class TodoServiceTest {
 
         //then
         assertThat(parentTodoReferences.size(), is(0));
-    }
-
-    private boolean isReferenceCorrect(List<Todo> referenceParentTodos, Todo mockTodo, Todo todo) {
-        return todo.getReferenceParentTodos().contains(new TodoReference(mockTodo, referenceParentTodos.get(0)));
     }
 
     private List<Todo> getReferenceParentTodos(final List<Long> refIds) {
