@@ -29,23 +29,11 @@ public class Todo {
     @Column(name = "complete", nullable = false)
     private boolean complete;
 
-//    @OneToMany(mappedBy = "todo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private Set<TodoReference> referenceParentTodos = new HashSet<>(); //내가 참조하는것(참조 부모)
-//    @Transient
-//    private Set<TodoReference> referenceParentTodos = new HashSet<>(); //내가 참조하는것(참조 부모)
-
-//    @OneToMany(mappedBy = "refTodo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private Set<TodoReference> referenceChildTodos = new HashSet<>(); // 내가 참조 되어지는것(참조 자식)
-
-//    @Transient
-//    private Set<TodoReference> referenceChildTodos = new HashSet<>(); // 내가 참조 되어지는것(참조 자식)
-
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
-            name = "todo_parent_ref",
+            name = "todo_reference",
             joinColumns = {@JoinColumn(name = "todo_id", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "parent_id", nullable = false)}
+            inverseJoinColumns = {@JoinColumn(name = "ref_parent_id", nullable = false)}
     )
     private Set<Todo> referenceParentTodos = new HashSet<>();
 

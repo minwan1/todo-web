@@ -94,4 +94,15 @@ public class TodoTest {
         assertThat(todo.getFullContent(), is("update-test" + " @1 @4 @5"));
     }
 
+    @Test
+    public void EqualsHashTest() {
+        Todo td = new Todo(2L, TODO_CONTENT,false, new HashSet<>(), new HashSet<>());
+
+        assertThat(todo.equals(parentTodo), is(false));
+        assertThat(todo.hashCode() == parentTodo.hashCode(), is(false));
+
+        assertThat(todo.hashCode() == td.hashCode(), is(true));
+        assertThat(todo.equals(td), is(true));
+    }
+
 }
