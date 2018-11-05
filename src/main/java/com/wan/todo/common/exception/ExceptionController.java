@@ -34,7 +34,7 @@ public class ExceptionController {
         final List<FieldError> errors = bindingResult.getFieldErrors();
         final ErrorCode errorCode = ErrorCode.INPUT_VALUE_INVALID;
         final List<ErrorResponse.FieldError> fieldErrors = builderFieldError(errors);
-        final ErrorResponse errorResponse = ErrorResponseBuilder.newTypeFieldError(e, request, errorCode, fieldErrors, value);
+        final ErrorResponse errorResponse = ErrorResponseBuilder.newTypeFieldError(errorCode, fieldErrors);
         log.error(mapperUtil.writeValueAsString(errorResponse));
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -45,7 +45,7 @@ public class ExceptionController {
     protected ResponseEntity<ErrorResponse> handleErrorCodeException(ErrorCodeException e, HttpServletRequest request) {
         log.error("ErrorCodeException", e);
         final HttpStatus status = HttpStatus.valueOf(e.getErrorCode().status());
-        final ErrorResponse errorResponse = buildErrorResponse(e, request);
+        final ErrorResponse errorResponse = buildErrorResponse(e);
         log.error(mapperUtil.writeValueAsString(errorResponse));
         return new ResponseEntity<>(errorResponse, status);
     }
@@ -56,7 +56,7 @@ public class ExceptionController {
     public ResponseEntity<ErrorResponse> handleUnexpectedException(final RuntimeException e, HttpServletRequest request) {
         log.error("handleUnexpectedException", e);
         final ErrorCode errorCode = ErrorCode.UNEXPECTED_EXCEPTION;
-        final ErrorResponse errorResponse = ErrorResponseBuilder.newType(e, request, errorCode);
+        final ErrorResponse errorResponse = ErrorResponseBuilder.newType(errorCode);
         log.error(mapperUtil.writeValueAsString(errorResponse));
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -71,14 +71,8 @@ public class ExceptionController {
                 .collect(Collectors.toList());
     }
 
-    private ErrorResponse buildErrorResponse(ErrorCodeException e, HttpServletRequest request) {
-        final ErrorResponse errorResponse;
-        if (e.getValue() == null) {
-            errorResponse = ErrorResponseBuilder.newType(e, request, e.getErrorCode());
-        } else {
-            errorResponse = ErrorResponseBuilder.newTypeValue(e, request, e.getErrorCode(), e.getValue());
-        }
-        return errorResponse;
+    private ErrorResponse buildErrorResponse(ErrorCodeException e) {
+            return ErrorResponseBuilder.newType(e.getErrorCode());
     }
 
 }
