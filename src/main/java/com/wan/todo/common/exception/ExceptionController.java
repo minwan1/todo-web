@@ -25,6 +25,20 @@ public class ExceptionController {
 
     private ObjectMapperUtil mapperUtil;
 
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
+        log.error("handleMethodArgumentNotValidException", e);
+        final Object value = e.getBindingResult().getTarget();
+        final BindingResult bindingResult = e.getBindingResult();
+        final List<FieldError> errors = bindingResult.getFieldErrors();
+        final ErrorCode errorCode = ErrorCode.INPUT_VALUE_INVALID;
+        final List<ErrorResponse.FieldError> fieldErrors = builderFieldError(errors);
+        final ErrorResponse errorResponse = ErrorResponseBuilder.newTypeFieldError(e, request, errorCode, fieldErrors, value);
+        log.error(mapperUtil.writeValueAsString(errorResponse));
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(value = {
             ErrorCodeException.class,
     })
@@ -46,48 +60,6 @@ public class ExceptionController {
         log.error(mapperUtil.writeValueAsString(errorResponse));
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    @ExceptionHandler(value = {
-            FieldErrorException.class
-    })
-    protected ResponseEntity<ErrorResponse> handleFieldErrorException(FieldErrorException e, HttpServletRequest request) {
-        log.error("handleFieldErrorException", e);
-        final ErrorCode errorCode = e.getErrorCode();
-        final HttpStatus status = HttpStatus.valueOf(e.getErrorCode().status());
-        final List<ErrorResponse.FieldError> value = e.getErrors();
-        final ErrorResponse errorResponse = ErrorResponseBuilder.newTypeFieldError(e, request, errorCode, e.getErrors(), value);
-        log.error(mapperUtil.writeValueAsString(errorResponse));
-        return new ResponseEntity<>(errorResponse, status);
-    }
-
-
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
-        log.error("handleMethodArgumentNotValidException", e);
-        final Object value = e.getBindingResult().getTarget();
-        final BindingResult bindingResult = e.getBindingResult();
-        final List<FieldError> errors = bindingResult.getFieldErrors();
-        final ErrorCode errorCode = ErrorCode.INPUT_VALUE_INVALID;
-        final List<ErrorResponse.FieldError> fieldErrors = builderFieldError(errors);
-        final ErrorResponse errorResponse = ErrorResponseBuilder.newTypeFieldError(e, request, errorCode, fieldErrors, value);
-        log.error(mapperUtil.writeValueAsString(errorResponse));
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(BindException.class)
-    protected ResponseEntity<ErrorResponse> handleBindException(BindException e, HttpServletRequest request) {
-        log.error("handleBindException", e);
-        final Object value = e.getBindingResult().getTarget();
-        final BindingResult bindingResult = e.getBindingResult();
-        final List<FieldError> errors = bindingResult.getFieldErrors();
-        final ErrorCode errorCode = ErrorCode.INPUT_VALUE_INVALID;
-        final List<ErrorResponse.FieldError> fieldErrors = builderFieldError(errors);
-        final ErrorResponse errorResponse = ErrorResponseBuilder.newTypeFieldError(e, request, errorCode, fieldErrors, value);
-        log.error(mapperUtil.writeValueAsString(errorResponse));
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
-
 
     private List<ErrorResponse.FieldError> builderFieldError(List<FieldError> errors) {
         return errors.stream()
