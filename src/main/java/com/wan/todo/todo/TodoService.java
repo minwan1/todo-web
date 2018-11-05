@@ -22,8 +22,7 @@ public class TodoService {
 
     public Todo create(final TodoCreateRequest dto) {
         final List<Todo> referenceTodos = todoRepository.findByIdIn(dto.getRefIds());
-        final Todo todo = todoRepository.save(new Todo(dto.getContent(), referenceTodos));
-        return todo;
+        return todoRepository.save(new Todo(dto.getContent(), referenceTodos));
     }
 
     public Todo update(final long id, final TodoUpdateRequest dto) {
@@ -34,7 +33,8 @@ public class TodoService {
     }
 
     public Page<Todo> getTodos(final Pageable pageable) {
-        final Page<Todo> todos = todoRepository.findAll(pageable);
+        final Page<Todo> todos = todoRepository.findAllWithParents(pageable);
+//        final Page<Todo> allWithParents = todoRepository.findAllWithParents();
         return todos;
     }
 

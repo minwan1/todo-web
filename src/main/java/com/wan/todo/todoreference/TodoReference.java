@@ -18,12 +18,12 @@ import java.util.Objects;
 public class TodoReference implements Serializable{
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="todo_id")
     private Todo todo;
 
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="ref_todo_id")
     private Todo refTodo;
 
