@@ -103,19 +103,7 @@ angular.module('TodoApp')
           }
         });
     }
-    function isValidateReferenceId(todo, id){
-
-      if(!id){
-        swal('', 'id를 입력하세요.');
-        return false;
-      }
-
-      if (todo.refIds.includes(id)) {
-        swal('', '이미 추가한 id입니다.');
-        return false;
-      }
-      return true;
-    }
+    
     function getTodos(page) {
       TodoService.getTodos(page)
         .then(function (res) {
