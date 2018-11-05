@@ -6,11 +6,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 @Component
+@Transactional
 @AllArgsConstructor
 public class DataSetRunner implements ApplicationRunner {
 
