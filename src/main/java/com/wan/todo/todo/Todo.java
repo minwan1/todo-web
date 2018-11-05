@@ -1,5 +1,6 @@
 package com.wan.todo.todo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wan.todo.todo.exception.CompleteRequirementFailException;
 import com.wan.todo.todo.exception.TodoReferenceImpossibilityException;
 import com.wan.todo.todoreference.TodoReference;
@@ -10,9 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -32,11 +31,29 @@ public class Todo {
     @Column(name = "complete", nullable = false)
     private boolean complete;
 
-    @OneToMany(mappedBy = "todo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<TodoReference> referenceParentTodos = new HashSet<>(); //내가 참조하는것(참조 부모)
+//    @OneToMany(mappedBy = "todo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private Set<TodoReference> referenceParentTodos = new HashSet<>(); //내가 참조하는것(참조 부모)
+//    @Transient
+//    private Set<TodoReference> referenceParentTodos = new HashSet<>(); //내가 참조하는것(참조 부모)
 
-    @OneToMany(mappedBy = "refTodo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<TodoReference> referenceChildTodos = new HashSet<>(); // 내가 참조 되어지는것(참조 자식)
+//    @OneToMany(mappedBy = "refTodo", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private Set<TodoReference> referenceChildTodos = new HashSet<>(); // 내가 참조 되어지는것(참조 자식)
+
+//    @Transient
+//    private Set<TodoReference> referenceChildTodos = new HashSet<>(); // 내가 참조 되어지는것(참조 자식)
+
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "todo_parent_ref",
+            joinColumns = {@JoinColumn(name = "todo_id", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "parent_id", nullable = false)}
+    )
+    private Set<Todo> referenceParentTodos = new HashSet<>();
+
+    @ManyToMany(mappedBy = "referenceParentTodos" , fetch = FetchType.LAZY)
+    private Set<Todo> referenceChildTodos = new HashSet<>();
+
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -57,8 +74,8 @@ public class Todo {
         this.id = id;
         this.content = content;
         this.complete = complete;
-        this.referenceParentTodos = referenceParentTodos;
-        this.referenceChildTodos = referenceChildTodos;
+//        this.referenceParentTodos = referenceParentTodos;
+//        this.referenceChildTodos = referenceChildTodos;
     }
 
     public void updateContent(String content, List<Todo> referenceTodoParents) {
@@ -83,11 +100,11 @@ public class Todo {
     }
 
     public void addRefParent(TodoReference todoReference) {
-        this.referenceParentTodos.add(todoReference);
+//        this.referenceParentTodos.add(todoReference);
     }
 
     public void addRefChild(TodoReference todoReference) {
-        this.referenceChildTodos.add(todoReference);
+//        this.referenceChildTodos.add(todoReference);
     }
 
     public void verifyTodoIsReferable() {
@@ -99,13 +116,13 @@ public class Todo {
     private boolean canComplete() {
         final boolean result = this.referenceChildTodos
                 .stream()
-                .allMatch(todo -> todo.getTodo().isComplete());
+                .allMatch(todo -> todo.isComplete());
         return result;
     }
 
     private String getReferenceIdTags() {
         return referenceParentTodos.stream()
-                .map(t -> "@" + t.getRefTodo().getId())
+                .map(t -> "@" + t.getId())
                 .sorted(String::compareTo)
                 .collect(Collectors.joining(" "));
     }
@@ -114,7 +131,22 @@ public class Todo {
         todoReferences.stream()
                 .forEach(todo -> {
                     todo.verifyTodoIsReferable();
-                    this.referenceParentTodos.add(new TodoReference(this, todo));
+                    this.referenceParentTodos.add(todo);
                 });
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Todo todo = (Todo) o;
+        return id == todo.id;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id);
     }
 }

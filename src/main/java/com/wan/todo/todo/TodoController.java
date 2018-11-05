@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -47,12 +48,17 @@ public class TodoController {
 
     @GetMapping(value = "/{id}/ref")
     public List<TodoResponse> getReferenceParentTodos(@PathVariable final long id) {
-        return TodoResponse.valueOfReferenceTodo(todoService.getParentTodoReferences(id));
+        return TodoResponse.valueOf(new ArrayList<>(todoService.getParentTodoReferences(id)));
     }
 
     @GetMapping(value = "/{id}/ref-check")
     public void checkId(@PathVariable final long id) {
         todoService.verifyTodoIsReferable(id);
+    }
+
+    @GetMapping(value = "/test")
+    public void test(@PathVariable final long id) {
+        todoService.test(id);
     }
 
 }

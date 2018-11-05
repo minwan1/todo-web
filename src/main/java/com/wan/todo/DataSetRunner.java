@@ -22,10 +22,9 @@ public class DataSetRunner implements ApplicationRunner {
         todoRepository.save(todo1);
         final Todo todo2 = new Todo("빨래", Arrays.asList(todo1));
         todoRepository.save(todo2);
-
-//        final Todo todo3 = new Todo("청소", Arrays.asList(todo1));
-//        todoRepository.save(todo3);
-//        final Todo todo4 = new Todo("방청소", Arrays.asList(todo1, todo3));
-//        todoRepository.save(todo4);
+        final Todo todo3 = new Todo("청소", Arrays.asList(todo1));
+        todoRepository.save(todo3);
+        final Todo todo4 = new Todo("방청소", Arrays.asList(todo1, todo3));
+        todoRepository.save(todo4);
     }
 }

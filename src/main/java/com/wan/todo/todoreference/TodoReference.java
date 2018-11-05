@@ -17,6 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TodoReference implements Serializable{
 
+
     @Id
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="todo_id")

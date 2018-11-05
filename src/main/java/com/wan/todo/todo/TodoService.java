@@ -3,7 +3,6 @@ package com.wan.todo.todo;
 import com.wan.todo.todo.dto.TodoCreateRequest;
 import com.wan.todo.todo.dto.TodoUpdateRequest;
 import com.wan.todo.todo.exception.TodoNotFoundException;
-import com.wan.todo.todoreference.TodoReference;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,13 +32,12 @@ public class TodoService {
     }
 
     public Page<Todo> getTodos(final Pageable pageable) {
-        final Page<Todo> todos = todoRepository.findAllWithParents(pageable);
-//        final Page<Todo> allWithParents = todoRepository.findAllWithParents();
+        final Page<Todo> todos = todoRepository.findAllFechJoinParents(pageable);
         return todos;
     }
 
     public Todo completeTodo(final long id) {
-        Todo todo = findById(id);
+        Todo todo = findByIdFetchJoin(id);
         todo.complete();
         return todo;
     }
@@ -49,8 +47,8 @@ public class TodoService {
         todo.verifyTodoIsReferable();
     }
 
-    public Set<TodoReference> getParentTodoReferences(final long id) {
-        final Todo todo = findById(id);
+    public Set<Todo> getParentTodoReferences(final long id) {
+        final Todo todo = findByIdFetchJoin(id);
         return todo.getReferenceParentTodos();
     }
 
@@ -58,5 +56,15 @@ public class TodoService {
         final Todo todo = todoRepository.findOne(id);
         if (todo == null) throw new TodoNotFoundException(id);
         return todo;
+    }
+
+    private Todo findByIdFetchJoin(final long id) {
+        final Todo todo = todoRepository.findbyOneFetchJoin(id);
+        if (todo == null) throw new TodoNotFoundException(id);
+        return todo;
+    }
+
+    public void test(long id) {
+//        todo
     }
 }

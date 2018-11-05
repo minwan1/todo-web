@@ -131,7 +131,7 @@ public class TodoServiceTest {
         given(todoRepository.findOne(anyLong())).willReturn(new Todo("test",  new ArrayList<>()));
 
         //when
-        final Set<TodoReference> parentTodoReferences = todoService.getParentTodoReferences(0l);
+        final Set<Todo> parentTodoReferences = todoService.getParentTodoReferences(0l);
 
         //then
         assertThat(parentTodoReferences.size(), is(0));
@@ -142,7 +142,7 @@ public class TodoServiceTest {
         //given
 
         //when
-        final Set<TodoReference> parentTodoReferences = todoService.getParentTodoReferences(0l);
+        final Set<Todo> parentTodoReferences = todoService.getParentTodoReferences(0l);
 
         //then
         assertThat(parentTodoReferences.size(), is(0));
