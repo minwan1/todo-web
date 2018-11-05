@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/minwan1/todo-web.svg?branch=master)](https://travis-ci.com/minwan1/todo-web)
+[![Coverage Status](https://coveralls.io/repos/github/minwan1/todo-web/badge.svg?branch=master)](https://coveralls.io/github/minwan1/todo-web?branch=master)
 # Todo 웹 만들기
 할일 목록(todo-list) 웹 어플리케이션 구현
 
