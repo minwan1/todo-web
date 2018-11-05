@@ -52,7 +52,7 @@ public class TodoController {
     }
 
     @GetMapping(value = "/{id}/ref-check")
-    public void checkId(@PathVariable final long id) {
+    public void verifyTodoIsReferable(@PathVariable final long id) {
         todoService.verifyTodoIsReferable(id);
     }
 
