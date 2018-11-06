@@ -7,8 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-@Getter
-@Setter
 public class PageVo {
     private static final int DEFAULT_SIZE = 10;
     private static final int DEFAULT_MAX_SIZE = 50;
@@ -23,6 +21,27 @@ public class PageVo {
     public PageVo() {
         this.page = 1; // start page set 1 because Pageable lib is start page is 0
         this.size = DEFAULT_SIZE;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+
+    public void setPage(int page) {
+        this.page = page < 0 ? 1 : page;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        if(size == 0) {
+            this.size = ALL;
+        }else{
+            this.size = size > DEFAULT_MAX_SIZE ? DEFAULT_SIZE : size;
+        }
     }
 
     public Pageable makePageable(int direction, String... props) {
