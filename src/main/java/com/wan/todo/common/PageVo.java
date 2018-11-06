@@ -1,10 +1,14 @@
 package com.wan.todo.common;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+@Getter
+@Setter
 public class PageVo {
     private static final int DEFAULT_SIZE = 10;
     private static final int DEFAULT_MAX_SIZE = 50;
