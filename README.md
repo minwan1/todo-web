@@ -144,7 +144,8 @@
 ```
 $ git clone https://github.com/minwan1/todo-web.git
 $ cd todo-web
-$ mvn spring-boot:run
+$ ./mvnw clean install
+$ ./mvnw spring-boot:run
 
 http://localhost:8080/index.html#/
 ```
@@ -152,8 +153,8 @@ http://localhost:8080/index.html#/
 ### Docker
 ```
 $ git clone https://github.com/minwan1/todo-web.git
-$ cd todo-web 
-$ mvn clean package
+$ cd todo-web
+$ ./mvnw clean package
 $ docker run -d -p 8080:8080 wan/tododemo
 
 http://localhost:8080/index.html#/
