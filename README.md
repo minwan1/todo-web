@@ -142,8 +142,19 @@
 # 6. 빌드 및 실행
 ### Maven
 ```
-git clone https://github.com/minwan1/todo-web.git
-cd todo-web
-mvn spring-boot:run
-페이지 입력 -> http://localhost:8080/index.html#/
+$ git clone https://github.com/minwan1/todo-web.git
+$ cd todo-web
+$ mvn spring-boot:run
+
+http://localhost:8080/index.html#/
+```
+
+### Docker
+```
+$ git clone https://github.com/minwan1/todo-web.git
+$ cd todo-web 
+$ mvn clean package
+$ docker run -d -p 8080:8080 wan/tododemo
+
+http://localhost:8080/index.html#/
 ```
