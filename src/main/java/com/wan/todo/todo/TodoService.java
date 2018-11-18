@@ -32,8 +32,7 @@ public class TodoService {
     }
 
     public Page<Todo> getTodos(final Pageable pageable) {
-        final Page<Todo> todos = todoRepository.findAllFechJoinParents(pageable);
-        return todos;
+        return todoRepository.findAllFechJoinParents(pageable);
     }
 
     public Todo completeTodo(final long id) {
