@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Getter
@@ -22,14 +24,27 @@ public class ErrorResponse {
     private String timestamp = ZonedDateTime.now().toOffsetDateTime().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     private List<FieldError> errors;
 
-    @Builder
-    public ErrorResponse(String message, String code, int status, List<FieldError> errors) {
-        this.message = message;
-        this.code = code;
-        this.status = status;
-        this.errors = errors == null ? new ArrayList<>() : errors;
+    private ErrorResponse(ErrorCode errorCode) {
+        this.message = errorCode.message();
+        this.code = errorCode.code();
+        this.status = errorCode.status();
+        this.errors = new ArrayList<>();
     }
 
+    public ErrorResponse(ErrorCode errorCode, List<FieldError> fieldErrors) {
+        this.message = errorCode.message();
+        this.status = errorCode.status();
+        this.code = errorCode.code();
+        this.errors = fieldErrors;
+    }
+
+    public static ErrorResponse valueOf(ErrorCode errorCode, BindingResult bindingResult) {
+        return new ErrorResponse(errorCode, buildFieldError(bindingResult));
+    }
+
+    public static ErrorResponse valueOf(ErrorCode errorCode) {
+        return new ErrorResponse(errorCode);
+    }
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -44,6 +59,17 @@ public class ErrorResponse {
             this.value = value;
             this.reason = reason;
         }
+    }
+
+    private static List<ErrorResponse.FieldError> buildFieldError(BindingResult bindingResult) {
+        final List<org.springframework.validation.FieldError> fieldErrors = bindingResult.getFieldErrors();
+        return fieldErrors.stream()
+                .map(error -> ErrorResponse.FieldError.builder()
+                        .reason(error.getDefaultMessage())
+                        .field(error.getField())
+                        .value(error.getRejectedValue().toString())
+                        .build())
+                .collect(Collectors.toList());
     }
 
 }

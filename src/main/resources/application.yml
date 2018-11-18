@@ -1,6 +1,6 @@
 spring:
   jpa:
-    database: H2
+    database: mysql
     hibernate:
       ddl-auto: create-drop
       use-new-id-generator-mappings: true
@@ -9,8 +9,9 @@ spring:
       hibernate.format_sql: true
     generate-ddl: true
 
-logging:
-  level:
-    org:
-      hibernate:
-        type: trace
+  datasource:
+    platform: mysql
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/todo?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false
+    username: root
+    password:

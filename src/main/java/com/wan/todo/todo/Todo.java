@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -45,14 +46,14 @@ public class Todo {
     @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @CreationTimestamp
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
     public Todo(String content, List<Todo> referenceParentTodos) {
-        this.content = content;
-        this.complete = false;
-        addTodoReference(referenceParentTodos);
+            this.content = content;
+            this.complete = false;
+            addTodoReference(referenceParentTodos);
     }
 
     //for test
@@ -78,10 +79,10 @@ public class Todo {
     }
 
     public String getFullContent() {
-        if (referenceParentTodos.size() == 0) {
+        if (referenceParentTodos.isEmpty()) {
             return this.content;
         } else {
-            return this.content + " " + getReferenceIdTags();
+            return String.format("%s %s", this.content, getReferenceIdTags());
         }
     }
 
@@ -100,10 +101,9 @@ public class Todo {
     }
 
     private boolean canComplete() {
-        final boolean result = this.referenceChildTodos
+        return this.referenceChildTodos
                 .stream()
                 .allMatch(todo -> todo.isComplete());
-        return result;
     }
 
     private String getReferenceIdTags() {
