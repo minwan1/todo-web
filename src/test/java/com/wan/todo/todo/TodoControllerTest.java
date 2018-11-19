@@ -141,7 +141,7 @@ public class TodoControllerTest {
     public void update_TodoUpdateIsSuccess_TodoResponse() throws Exception {
 
         //given
-        final TodoUpdateRequest request = new TodoUpdateRequest("update-test", new ArrayList<>());
+        final TodoUpdateRequest request = new TodoUpdateRequest("update-test");
         given(todoService.update(anyLong(), any())).willReturn(new Todo(request.getContent(), new ArrayList<>()));
 
         //when

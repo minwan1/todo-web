@@ -55,7 +55,7 @@ angular.module('TodoApp')
     };
 
     $scope.updateTodo = function(todoForm, todo, currentPage){
-      TodoService.update(todo.id, todo.content, todo.refIds)
+      TodoService.update(todo.id, todo.content)
         .then(function(){
           swal('', '해당 Todo 내용 수정되었습니다.');
           $scope.todo = Todo(0, '', [], false);

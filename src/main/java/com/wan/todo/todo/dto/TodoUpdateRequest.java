@@ -16,10 +16,7 @@ public class TodoUpdateRequest {
     @NotEmpty
     private String content;
 
-    private List<Long> refIds = new ArrayList<>();
-
-    public TodoUpdateRequest(String content, List<Long> refIds) {
+    public TodoUpdateRequest(String content) {
         this.content = content;
-        this.refIds = refIds;
     }
 }

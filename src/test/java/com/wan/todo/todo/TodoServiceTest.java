@@ -76,17 +76,14 @@ public class TodoServiceTest {
 
         //given
         final String UPDATE_CONTENT = "update-test";
-        final TodoUpdateRequest todoUpdateRequest = new TodoUpdateRequest(UPDATE_CONTENT, Arrays.asList(0l));
-        final List<Todo> referenceParentTodos = getReferenceParentTodos(todoUpdateRequest.getRefIds());
-        given(todoRepository.findByIdIn(any())).willReturn(referenceParentTodos);
-        given(todoRepository.findOne(anyLong())).willReturn(new Todo("test", referenceParentTodos));
+        final TodoUpdateRequest todoUpdateRequest = new TodoUpdateRequest(UPDATE_CONTENT);
+        given(todoRepository.findOne(anyLong())).willReturn(new Todo("test", new ArrayList<>()));
 
         //when
         final Todo todo = todoService.update(0l, todoUpdateRequest);
 
         //then
         assertThat(todo.getContent(), is(UPDATE_CONTENT));
-        assertThat(todo.getReferenceParentTodos().size(), is(todoUpdateRequest.getRefIds().size()));
 
     }
 

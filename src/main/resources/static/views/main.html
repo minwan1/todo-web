@@ -100,7 +100,6 @@
   </div>
 </div>
 
-
 <div class="panel panel-default" ng-if="todo.isUpdateMode">
   <!-- Default panel contents -->
   <div class="panel-heading"><span class="lead">Todo 수정</span></div>
@@ -119,21 +118,6 @@
         </div>
 
         <div class="row">
-          <div class="form-group col-md-12">
-            <label class="col-md-2 control-lable" for="refId">참조 ID</label>
-            <div class="col-md-6">
-              <input type="number" id="refId" ng-model="refId" class="form-control input-sm" placeholder="참조할 ID를 입력해주세요.(ID를 하나씩 추가해주세요.)"/>
-            </div>
-            <div class="col-md-2">
-              <button type="button" ng-click="addReferenceId(todo, refId)" class="form-control btn btn-warning btn-sm">참조 ID 추가</button>
-            </div>
-            <div class="col-md-2">
-              <button type="button" ng-click="resetRefIds(todo)" class="form-control btn btn-warning btn-sm">참조 ID 리셋</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
           <div>
             <ul ng-repeat="id in todo.refIds">
               <li>{{ id }}
@@ -141,7 +125,6 @@
             </ul>
           </div>
         </div>
-
         <div class="row" class="col-md-12">
           <div class="form-actions floatRight">
             <input type="submit" value="수정하기" class="btn btn-primary btn-sm col-md-12">

@@ -65,9 +65,8 @@ public class Todo {
         this.referenceChildTodos = referenceChildTodos;
     }
 
-    public void updateContent(String content, List<Todo> referenceTodoParents) {
+    public void updateContent(String content) {
         this.content = content;
-        addTodoReference(referenceTodoParents);
     }
 
     public void complete() {

@@ -25,9 +25,8 @@ public class TodoService {
     }
 
     public Todo update(final long id, final TodoUpdateRequest dto) {
-        final List<Todo> referenceTodos = todoRepository.findByIdIn(dto.getRefIds());
         Todo todo = findById(id);
-        todo.updateContent(dto.getContent(), referenceTodos);
+        todo.updateContent(dto.getContent());
         return todo;
     }
 

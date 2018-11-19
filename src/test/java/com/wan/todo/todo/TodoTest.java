@@ -85,9 +85,11 @@ public class TodoTest {
         final String UPDATE_CONTENT = "update-test";
         final Todo parentTodo1 = new Todo(4L, "parent", false, new HashSet<>(), new HashSet<>());
         final Todo parentTodo2 = new Todo(5L, "parent", false, new HashSet<>(), new HashSet<>());
+        todo.addRefParent(parentTodo1);
+        todo.addRefParent(parentTodo2);
 
         //when
-        todo.updateContent("update-test", Arrays.asList(parentTodo1, parentTodo2));
+        todo.updateContent("update-test");
 
         //then
         assertThat(todo.getContent(), is(UPDATE_CONTENT));

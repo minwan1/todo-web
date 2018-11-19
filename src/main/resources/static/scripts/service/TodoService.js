@@ -71,13 +71,10 @@ angular.module('TodoApp').factory('TodoService', ($http, config, $q) => {
     return deferred.promise;
   }
 
-
-  // TODO 업데이트 기능 개발중이엿음.
-  function update(id, content, refIds) {
+  function update(id, content) {
     var deferred = $q.defer();
     var json = {
-      content : content,
-      refIds : refIds
+      content : content
     };
 
     $http({
